@@ -1,10 +1,16 @@
 const express = require("express");
-const mongoose = require("./dbconnect");
+require("dotenv").config();
+const bodyParser = require("body-parser");
+const db = require("./dbconnect");
 const app = express();
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   console.log("/ root path");
   res.send("Home Page");
 });
 
-app.listen(3000);
+db.connect();
+app.listen(process.env.PORT, () => {
+  console.log("connection successfully");
+});
