@@ -1,7 +1,11 @@
-const express = require("express");
-require("dotenv").config();
-const bodyParser = require("body-parser");
-const db = require("./database/dbconnect");
+import 'dotenv/config';
+import express from "express";
+import bodyParser from "body-parser";
+import dbconnect from "./database/dbconnect.js";
+
+
+const port = process.env.PORT || 3000;
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -10,7 +14,7 @@ app.get("/", (req, res) => {
   res.send("Home Page");
 });
 
-db.connect();
-app.listen(process.env.PORT, () => {
+dbconnect();
+app.listen(port, () => {
   console.log("connection successfully");
 });
