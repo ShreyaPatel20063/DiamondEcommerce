@@ -1,20 +1,20 @@
-import 'dotenv/config';
-import express from "express";
+import "dotenv/config";
+import { app } from "./app.js";
 import bodyParser from "body-parser";
-import dbconnect from "./database/dbconnect.js";
-
+import dbconnect from "./db/dbconnect.js";
 
 const port = process.env.PORT || 3000;
 
-const app = express();
+
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  console.log("/ root path");
-  res.send("Home Page");
-});
+dbconnect()
+.then(()=>{
+  app.listen(port, () => {
+    console.log("server running successfully on port ", port);
+  });
+})
+.catch((err)=>{
+  console.log("server failed to start due to ", err);
+})
 
-dbconnect();
-app.listen(port, () => {
-  console.log("connection successfully");
-});
