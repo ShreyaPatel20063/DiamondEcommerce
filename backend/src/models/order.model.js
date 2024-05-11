@@ -34,6 +34,10 @@ const orderSchema = new mongoose.model({
         type: String,
         required: true,
     },
+    phone : {
+        type: String,
+        default: "",
+    },
     paymentMethod : [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'PaymentMethod',
