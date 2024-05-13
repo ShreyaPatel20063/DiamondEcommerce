@@ -157,8 +157,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken: undefined,
+            $unset: {
+                refreshToken: 1,
             },
         },
         {
@@ -260,7 +260,7 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 const updateProfilePicture = asyncHandler(async (req, res) => {
-    const profilePictureLocalPath = req.files?.profilePicture[0]?.path;
+    const profilePictureLocalPath = req.file?.path;
     if (!profilePictureLocalPath) {
         throw new ApiError(400, "Profile Picture is required");
     }
@@ -269,12 +269,18 @@ const updateProfilePicture = asyncHandler(async (req, res) => {
     if (!profilePicture) {
         throw new ApiError(400, "Profile Picture is required");
     }
-
+    
+    const oldProfilePicture = req.user.profilePicture;
+    
     const user = await User.findByIdAndUpdate(
         req.user._id,
         { profilePicture: profilePicture.url },
         { new: true }
     );
+
+    if (oldProfilePicture) {
+        await destroyFromCloudinary(oldProfilePicture);
+    }
 
     return res
         .status(200)
@@ -286,6 +292,7 @@ const updateProfilePicture = asyncHandler(async (req, res) => {
             )
         );
 });
+
 
 //export
 export {

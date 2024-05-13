@@ -35,7 +35,7 @@ router.route("/profile-picture").post(
     ]),
     updateProfilePicture
 );
-router.route("/update-user").put(verifyJWT, updateUser);
+router.route("/update-user").patch(verifyJWT, updateUser);
 
 // secure route or private routes
 router.route("/logout").post(verifyJWT, logoutUser);
